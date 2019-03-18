@@ -5,9 +5,19 @@ $LOAD_PATH.unshift(File.dirname(File.expand_path(__FILE__)) + '/../lib')
 require 'daemons'
 require 'passenger_datadog'
 
+app_argv = Daemons::Controller.split_argv(ARGV)[2]
+app_opts = {}
+op = OptionParser.new do |opts|
+  opts.banner = 'App args:'
+  opts.on("-c", "--config", String, "config file") do |config_file_path|
+    app_opts[:config] = config_file_path
+  end
+end
+op.parse!(app_argv)
+
 Daemons.run_proc('passenger-datadog', dir_mode: :system) do
   loop do
-    PassengerDatadog.new.run
+    PassengerDatadog.new.run(app_opts)
     sleep(30)
   end
 end
