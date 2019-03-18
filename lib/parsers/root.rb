@@ -6,10 +6,10 @@ module Parsers
       'get_wait_list_size' => 'request_queue'
     }.freeze
 
-    def run
-      STATS.each do |xml_key, key|
-        gauge(xml_key, key)
-      end
+    protected
+
+    def default_stats
+      STATS
     end
   end
 end

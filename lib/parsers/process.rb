@@ -14,10 +14,10 @@ module Parsers
       vmsize
     ].freeze
 
-    def run
-      STATS.each do |key|
-        gauge(key, key)
-      end
+    protected
+
+    def default_stats
+      STATS
     end
   end
 end

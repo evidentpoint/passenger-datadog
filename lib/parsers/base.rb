@@ -11,7 +11,26 @@ module Parsers
       @tags = tags
     end
 
+    def run(opts = nil)
+      valid_opts = opts.nil? || !(opts.is_a?(Array) || opts.is_a?(Hash))
+      stats = valid_opts ? opts : default_stats
+
+      if stats.is_a?(Array)
+        stats.each do |k|
+          gauge(k, k)
+        end
+      elsif stats.is_a?(Hash)
+        stats.each do |k, v|
+          gauge(k, v)
+        end
+      end
+    end
+
     protected
+
+    def default_stats
+      {}
+    end
 
     def gauge(xml_key, key)
       value = xml.xpath(xml_key).text
